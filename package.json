@@ -1,0 +1,23 @@
+{
+  "name": "music_finder",
+  "version": "1.0.0",
+  "description": "music finder that uses public api's",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+        "dev": "nodemon server.js",
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ibraaahim11/Music_Finder.git"
+  },
+  "author": "Ibrahim Hesham",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ibraaahim11/Music_Finder/issues"
+  },
+  "homepage": "https://github.com/ibraaahim11/Music_Finder#readme",
+
+}
