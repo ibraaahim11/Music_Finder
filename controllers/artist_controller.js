@@ -12,7 +12,6 @@ const headers = {
 // function to get data of album from full id
 export async function getArtistData(artistId) {
   try {
-    // fmt -> specify return type json or xml
     const response_artist = await axios.get(MB_URL + `/artist/${artistId}`, {
       params: {
         fmt: "json",
@@ -20,14 +19,12 @@ export async function getArtistData(artistId) {
       headers: headers,
     });
 
-    // creating object with needed info
-
     // get 5 songs from artist
     const songs = await getSongsByArtistId(artistId, 5);
     // get 5 albums from artist
     const albums = await getAlbumsByArtistId(artistId, 5);
 
-    // songs alnd albums object provide total count and count inside object
+    // create object with data
     const artistData = {
       id: response_artist.data.id,
       name: response_artist.data.name,
@@ -42,7 +39,7 @@ export async function getArtistData(artistId) {
 
     return artistData;
 
-    //  todo
+   
   } catch (err) {
     console.log(`Error [getArtistData] for ${artistId}: ` + err.message);
   }

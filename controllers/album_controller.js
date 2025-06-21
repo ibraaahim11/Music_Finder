@@ -110,8 +110,6 @@ export async function getAlbumsByArtistId(artistId, limit, page = 1) {
       })
     );
 
- 
-
     // Build the response object
     const albums_data = {
       total_count_albums: response_albums.data["release-group-count"],
@@ -129,7 +127,7 @@ export async function getAlbumsByArtistId(artistId, limit, page = 1) {
   }
 }
 
-// takes releases and picks first
+// function that takes releases and picks first release
 function getReleaseIdForGroup(releases) {
   // get a specific release
   if (releases.length === 0) {
@@ -141,9 +139,6 @@ function getReleaseIdForGroup(releases) {
 
 // function to get result object from release group id
 async function getGroupResForGroup(releaseGroupId) {
-  // fmt -> specify return type json or xml
-  // inc parameter -> other information you would like to be included
-
   // we get from release group
   const groupRes = await axios.get(
     MB_URL + `/release-group/${releaseGroupId}`,

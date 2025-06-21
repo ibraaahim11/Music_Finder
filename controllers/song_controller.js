@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getCoverImageUrl } from "./coverImage_controller.js";
-// Url of the MusicBrainz API
+// Url of the MusicBrainz, and lyrics.ovh api
 const MB_URL = "https://musicbrainz.org/ws/2";
 const LYRICS_OVH_URL = "https://api.lyrics.ovh/v1";
 
@@ -37,7 +37,7 @@ export async function getSongData(songId) {
       }),
       lyrics: null,
     };
-
+    // adding cover_url and lyrics in parallel using promise.allSettled
     const [cover, lyrics] = await Promise.allSettled([
       getCoverImageUrl(songData.releaseId),
       getLyrics(songData.artists[0]?.name || "", songData.title),
@@ -47,15 +47,14 @@ export async function getSongData(songId) {
     songData.lyrics = lyrics.status === "fulfilled" ? lyrics.value : null;
 
     return songData;
-
-    //  todo
   } catch (err) {
     console.log(`Error [getSongData] for ${songId}: ` + err.message);
   }
 }
-// get songs by artist id, provided limit and page of search
+
+// get songs by artist id, provided limit and page
 export async function getSongsByArtistId(artistId, limit, page = 1) {
-  // provide offset and limit in parameters
+  // calculate offset
   const offset = (page - 1) * limit;
   try {
     const response_songs = await axios.get(MB_URL + "/recording", {
@@ -68,7 +67,7 @@ export async function getSongsByArtistId(artistId, limit, page = 1) {
       headers: headers,
     });
 
-    // return total count of songs by artist, count of songs gotten, and the actual songs gotten
+    // return total count of songs by artist, count of songs searched, and the actual songs gotten.
     const songs_data = {
       total_count_songs: response_songs.data["recording-count"],
       count_songs: 0,
@@ -77,7 +76,7 @@ export async function getSongsByArtistId(artistId, limit, page = 1) {
         title: song.title,
       })),
     };
-
+    // add number of songs
     songs_data["count_songs"] = songs_data.songs.length;
 
     return songs_data;
@@ -91,7 +90,7 @@ async function getLyrics(artist, title) {
   // see if lyrics cached
   const key = `${artist}::${title}`;
   if (lyricsCache.has(key)) {
-    console.log("lyrics cached")
+    console.log("lyrics cached");
     return lyricsCache.get(key);
   } else {
     try {
@@ -100,6 +99,7 @@ async function getLyrics(artist, title) {
           title
         )}`
       );
+      // add lyrics to hash map
       lyricsCache.set(key, response.data.lyrics);
       return response.data.lyrics;
     } catch (err) {
