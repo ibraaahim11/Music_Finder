@@ -6,7 +6,7 @@ const cache = new Map();
 export async function getCoverImageUrl(releaseId) {
     // check if inside cache
   if (cache.has(releaseId)) {
-
+    console.log("Used cache");
     return cache.get(releaseId);
   }
   try {
@@ -19,9 +19,7 @@ export async function getCoverImageUrl(releaseId) {
     cache.set(releaseId,url);
     return url
   } catch (err) {
-    if (err.response && err.response.status === 404) {
-      return null;
-    }
-    throw err;
+    console.log(`Error [getCoverImageUrl] for ${releaseId}: ` + err.message);
   }
 }
+

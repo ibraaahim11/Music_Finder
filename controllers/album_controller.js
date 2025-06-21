@@ -8,31 +8,14 @@ const headers = {
   "User-Agent": "MusicFinder/1.0 ( exchangegiftsnow@yahoo.com )",
 };
 
-// function to get data of album from full id
+// function to get data of album from release group id
 export async function getAlbumData(releaseGroupId) {
   try {
-    // fmt -> specify return type json or xml
-    // inc parameter -> other information you would like to be included
+    // get result object
+    const groupRes = await getGroupResForGroup(releaseGroupId);
 
-    // we get from release group
-    const groupRes = await axios.get(
-      MB_URL + `/release-group/${releaseGroupId}`,
-      {
-        params: {
-          fmt: "json",
-          inc: "releases",
-        },
-        headers: headers,
-      }
-    );
-
-    // get a specific release
-    const releases = groupRes.data.releases || [];
-    if (releases.length === 0) {
-      throw new Error("No releases found for this release group.");
-    }
-    const chosenRelease = releases[0];
-    const albumId = chosenRelease.id;
+    // get specific release id (an actual album not release-group)
+    const albumId = getReleaseIdForGroup(groupRes.data.releases || []);
 
     // get info from specific release
 
@@ -72,39 +55,105 @@ export async function getAlbumData(releaseGroupId) {
     });
     albumData.numSongs = albumData.songs.length;
 
-    console.log(albumData);
     return albumData;
 
     //  todo
   } catch (err) {
-    console.error(err);
+    console.error(
+      `Error in getAlbumData for release group ${releaseGroupId}: ${err.message}`
+    );
   }
 }
 
-// function to return albums by artist id , given limit and page
+/// Function to return albums by artist id, given limit and page
 export async function getAlbumsByArtistId(artistId, limit, page = 1) {
-  const offset = (page - 1) * limit;
-  // offset and limit provided in parameters
-  const response_albums = await axios.get(MB_URL + "/release-group", {
-    params: {
-      fmt: "json",
-      artist: artistId,
-      limit: limit,
-      type: "album", // to get only albums, exclude singles/EPs/etc.
-      offset: offset,
-    },
-    headers: headers,
-  });
+  try {
+    const offset = (page - 1) * limit;
 
-  // object returned consists of total count of albums by artist, count of albums gotten, and the albums gotten.
-  const albums_data = {
-    total_count_albums: response_albums.data["release-group-count"],
-    count_albums: 0,
-    albums: response_albums.data["release-groups"].map((album) => ({
-      id: album.id,
-      title: album.title,
-    })),
-  };
-  albums_data["count_albums"] = albums_data.albums.length;
-  return albums_data;
+    // Get release groups (albums) for the artist
+    const response_albums = await axios.get(MB_URL + "/release-group", {
+      params: {
+        fmt: "json",
+        artist: artistId,
+        limit: limit,
+        type: "album", // only albums
+        offset: offset,
+      },
+      headers: headers,
+    });
+
+    // // Get detailed data for each release-group
+    // // await promise.all means do all these functions in parallel and wait for all of them to finish
+    const albums = await Promise.all(
+      response_albums.data["release-groups"].map(async (album) => {
+        try {
+          console.log(album.title);
+          // Wait for the full group data
+          const groupRes = await getGroupResForGroup(album.id);
+          const releases = groupRes.data.releases || [];
+
+          // Get a release ID (your custom logic)
+          const releaseId = getReleaseIdForGroup(releases);
+
+          // Get the cover image
+          const coverUrl = await getCoverImageUrl(releaseId);
+
+          return {
+            id: album.id,
+            title: album.title,
+            cover_url: coverUrl,
+          };
+        } catch (err) {
+          console.error(`[Album Cover Fetch] ${album.id}: ${err.message}`);
+          return null;
+        }
+      })
+    );
+
+ 
+
+    // Build the response object
+    const albums_data = {
+      total_count_albums: response_albums.data["release-group-count"],
+      count_albums: albums.length,
+      albums: albums,
+    };
+
+    return albums_data;
+  } catch (err) {
+    console.error(
+      `[getAlbumsByArtistId] Error for artist ${artistId}: ${
+        err?.message || "Unknown error"
+      }`
+    );
+  }
+}
+
+// takes releases and picks first
+function getReleaseIdForGroup(releases) {
+  // get a specific release
+  if (releases.length === 0) {
+    throw new Error("No releases found for this release group.");
+  }
+  const chosenRelease = releases[0];
+  return chosenRelease.id;
+}
+
+// function to get result object from release group id
+async function getGroupResForGroup(releaseGroupId) {
+  // fmt -> specify return type json or xml
+  // inc parameter -> other information you would like to be included
+
+  // we get from release group
+  const groupRes = await axios.get(
+    MB_URL + `/release-group/${releaseGroupId}`,
+    {
+      params: {
+        fmt: "json",
+        inc: "releases",
+      },
+      headers: headers,
+    }
+  );
+  return groupRes;
 }

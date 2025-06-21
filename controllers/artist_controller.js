@@ -40,11 +40,10 @@ export async function getArtistData(artistId) {
       },
     };
 
-    console.log(artistData);
     return artistData;
 
     //  todo
   } catch (err) {
-    console.error(err);
+    console.log(`Error [getArtistData] for ${artistId}: ` + err.message);
   }
 }

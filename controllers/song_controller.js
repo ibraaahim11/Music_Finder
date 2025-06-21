@@ -34,20 +34,19 @@ export async function getSongData(songId) {
     };
     songData["cover_url"] = await getCoverImageUrl(songData["releaseId"]);
 
-    console.log(response.data["artist-credit"]);
-    //console.log(songData);
 
     return songData;
 
     //  todo
   } catch (err) {
-    console.error(err);
+    console.log(`Error [getSongData] for ${songId}: ` + err.message);
   }
 }
 // get songs by artist id, provided limit and page of search
 export async function getSongsByArtistId(artistId, limit, page = 1) {
   // provide offset and limit in parameters
   const offset = (page - 1) * limit;
+  try{
   const response_songs = await axios.get(MB_URL + "/recording", {
     params: {
       fmt: "json",
@@ -71,4 +70,8 @@ export async function getSongsByArtistId(artistId, limit, page = 1) {
   songs_data["count_songs"] = songs_data.songs.length;
 
   return songs_data;
+}
+catch(err){
+  console.log(`Error [getSongsByArtistId] for ${artistId}: ` + err.message);
+}
 }

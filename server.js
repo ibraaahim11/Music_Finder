@@ -25,6 +25,8 @@ app.get("/song/:id", async (req, res) => {
   // full data
   const songData = await getSongData(songId);
 
+  console.log(songData);
+
   res.send(songData);
 });
 
@@ -33,6 +35,8 @@ app.get("/album/:id", async (req, res) => {
   const albumId = req.params.id;
   // full data
   const albumData = await getAlbumData(albumId);
+
+  console.log(albumData);
 
   res.send(albumData);
 });
@@ -43,6 +47,8 @@ app.get("/artist/:id", async (req, res) => {
   // full data
   const artistData = await getArtistData(artistId);
 
+  console.log(artistData);
+
   res.send(artistData);
 });
 
@@ -52,6 +58,8 @@ app.get("/artist/:id/songs", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
 
   const songs = await getSongsByArtistId(artistId, PAGE_LIMIT, page);
+
+  console.log(songs);
   res.send(songs);
 });
 
@@ -60,6 +68,8 @@ app.get("/artist/:id/albums", async (req, res) => {
   const artistId = req.params.id;
   const page = parseInt(req.query.page) || 1;
   const albums = await getAlbumsByArtistId(artistId, PAGE_LIMIT, page);
+
+  console.log(albums);
   res.send(albums);
 });
 
