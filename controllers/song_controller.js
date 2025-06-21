@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import {getCoverImageUrl} from "./coverImage_controller.js"
 // Url of the MusicBrainz API
 const MB_URL = "https://musicbrainz.org/ws/2";
 // header included with MusicBrainz API requests
@@ -19,15 +19,20 @@ export async function getSongData(songId) {
       },
       headers: headers,
     });
+
+    
     // creating object with needed ids
     const songData = {
       id: response.data.id,
       title: response.data.title,
+      releaseId : response.data.releases?.[0]?.id,
+      cover_url: null,
       release_date: response.data["first-release-date"],
       artists: response.data["artist-credit"].map((artistObj) => {
         return { name: artistObj.name, id: artistObj.artist.id };
       }),
     };
+    songData["cover_url"] = await getCoverImageUrl(songData["releaseId"]);
 
     console.log(response.data["artist-credit"]);
     //console.log(songData);
