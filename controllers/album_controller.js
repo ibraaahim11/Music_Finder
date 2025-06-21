@@ -64,8 +64,8 @@ export async function getAlbumData(releaseGroupId) {
     media.forEach((medium) => {
       if (medium.tracks) {
         const formattedTracks = medium.tracks.map((song) => ({
-          id: song.id,
-          title: song.title,
+          id: song.recording.id,
+          title: song.recording.title,
         }));
         albumData.songs = albumData.songs.concat(formattedTracks);
       }
