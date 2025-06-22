@@ -20,5 +20,6 @@ export async function getCoverImageUrl(releaseId) {
     return url;
   } catch (err) {
     console.log(`Error [getCoverImageUrl] for ${releaseId}: ` + err.message);
+    return null
   }
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getCoverImageUrl } from "./coverImage_controller.js";
-
+import { getPaginatedResults } from "./utils_controller.js";
 // Url of the MusicBrainz API
 const MB_URL = "https://musicbrainz.org/ws/2";
 // header included with MusicBrainz API requests
@@ -8,6 +8,7 @@ const headers = {
   "User-Agent": "MusicFinder/1.0 ( exchangegiftsnow@yahoo.com )",
 };
 
+const albumSearchCache = new Map(); //
 // function to get data of album from release group id
 export async function getAlbumData(releaseGroupId) {
   try {
@@ -87,7 +88,6 @@ export async function getAlbumsByArtistId(artistId, limit, page = 1) {
     const albums = await Promise.all(
       response_albums.data["release-groups"].map(async (album) => {
         try {
-          console.log(album.title);
           // Wait for the full group data
           const groupRes = await getGroupResForGroup(album.id);
           const releases = groupRes.data.releases || [];
@@ -124,6 +124,63 @@ export async function getAlbumsByArtistId(artistId, limit, page = 1) {
         err?.message || "Unknown error"
       }`
     );
+  }
+}
+
+export async function searchAlbums(name, page, limit) {
+  name = name.trim().toLowerCase();
+  if (albumSearchCache.has(name)) {
+    const paginated_albums = getPaginatedResults(
+      albumSearchCache.get(name),
+      page,
+      limit
+    );
+    const data = {
+      total_count_albums: albumSearchCache.get(name).length,
+      count_albums: paginated_albums.length,
+      paginated_albums: paginated_albums,
+    };
+    return data;
+  } else {
+    try {
+      const response = await axios.get(`${MB_URL}/release-group`, {
+        params: {
+          query: name,
+          fmt: "json",
+          limit: 100
+        },
+        headers: headers,
+      });
+
+      const sortedFiltered = response.data["release-groups"]
+        .sort((a, b) => b.score - a.score)
+        .filter((album) => album.score >= 90);
+
+      const result = sortedFiltered.map((album) => ({
+        id: album.id,
+        name: album.title,
+        artists: album["artist-credit"].map((artistObj) => {
+          return { name: artistObj.name, id: artistObj.artist.id };
+        }),
+        type: "artist",
+      }));
+
+      albumSearchCache.set(name, result);
+      const paginated_albums = getPaginatedResults(
+        albumSearchCache.get(name),
+        page,
+        limit
+      );
+      const data = {
+        total_count_albums: result.length,
+        count_albums: paginated_albums.length,
+        paginated_albums: paginated_albums,
+      };
+      return data;
+    } catch (err) {
+      console.error(`[searchAlbums] Error: ${err.message}`);
+      return [];
+    }
   }
 }
 

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getCoverImageUrl } from "./coverImage_controller.js";
+import { getPaginatedResults } from "./utils_controller.js";
 // Url of the MusicBrainz, and lyrics.ovh api
 const MB_URL = "https://musicbrainz.org/ws/2";
 const LYRICS_OVH_URL = "https://api.lyrics.ovh/v1";
@@ -11,6 +12,8 @@ const headers = {
 
 // cache for lyrics
 const lyricsCache = new Map(); // key: artist::title
+const artistSongsCache = new Map(); // key: artistId , value: list of song objects
+const songsSearchCache = new Map(); // key:
 
 // function to get data of song from full id
 export async function getSongData(songId) {
@@ -55,34 +58,69 @@ export async function getSongData(songId) {
 // get songs by artist id, provided limit and page
 export async function getSongsByArtistId(artistId, limit, page = 1) {
   // calculate offset
-  const offset = (page - 1) * limit;
-  try {
-    const response_songs = await axios.get(MB_URL + "/recording", {
-      params: {
-        fmt: "json",
-        artist: artistId,
-        limit: limit,
-        offset: offset,
-      },
-      headers: headers,
-    });
 
-    // return total count of songs by artist, count of songs searched, and the actual songs gotten.
+  try {
+    let filtered_songs;
+    if (artistSongsCache.has(artistId)) {
+      filtered_songs = artistSongsCache.get(artistId);
+      console.log("used song search cache");
+    } else {
+      const response_songs = await axios.get(MB_URL + "/recording", {
+        params: {
+          fmt: "json",
+          artist: artistId,
+          limit: 100,
+        },
+        headers: headers,
+      });
+
+      filtered_songs = filterSongs(response_songs.data.recordings);
+      artistSongsCache.set(artistId, filtered_songs);
+    }
+    const chosen_songs = getPaginatedResults(filtered_songs, page, limit);
+
     const songs_data = {
-      total_count_songs: response_songs.data["recording-count"],
-      count_songs: 0,
-      songs: response_songs.data.recordings.map((song) => ({
+      total_count_songs: filtered_songs.length,
+      count_songs: chosen_songs.length,
+      songs: chosen_songs.map((song) => ({
         id: song.id,
         title: song.title,
       })),
     };
-    // add number of songs
-    songs_data["count_songs"] = songs_data.songs.length;
 
     return songs_data;
   } catch (err) {
     console.log(`Error [getSongsByArtistId] for ${artistId}: ` + err.message);
   }
+}
+
+// Takes list of song entities and returns filtered list with no duplicates or unofficial songs
+function filterSongs(songs) {
+  const seenTitles = new Set();
+  const unwantedWords = [
+    "live",
+    "remix",
+    "demo",
+    "instrumental",
+    "version",
+    "edit",
+    "music video",
+    "behind the scenes",
+  ];
+
+  const isClean = (title) =>
+    !unwantedWords.some((word) => title.toLowerCase().includes(word));
+
+  const filtered_songs = [];
+
+  songs.forEach((song) => {
+    if (isClean(song.title) && !seenTitles.has(song.title)) {
+      seenTitles.add(song.title);
+      filtered_songs.push(song);
+    }
+  });
+
+  return filtered_songs;
 }
 
 // function to get lyrics given artist, title using lyrics.ovh api
@@ -105,6 +143,65 @@ async function getLyrics(artist, title) {
     } catch (err) {
       console.error(`[Lyrics Error] ${artist} - ${title}: ${err.message}`);
       return null;
+    }
+  }
+}
+
+export async function searchSongs(name, page, limit) {
+  name = name.trim().toLowerCase();
+  if (songsSearchCache.has(name)) {
+   
+    const paginated_songs = getPaginatedResults(
+      songsSearchCache.get(name),
+      page,
+      limit
+    );
+    const data = {
+      total_count_songs: songsSearchCache.get(name).length,
+      count_songs: paginated_songs.length,
+      paginated_songs: paginated_songs,
+    };
+    return data;
+  } else {
+    try {
+      const response = await axios.get(`${MB_URL}/recording`, {
+        params: {
+          query: name,
+          inc: "artist-credits",
+          fmt: "json",
+          limit: 100
+        },
+        headers: headers,
+        limit:100
+      });
+
+      const sortedFiltered = response.data.recordings
+        .sort((a, b) => b.score - a.score)
+        .filter((recording) => recording.score >= 90);
+
+      const result = sortedFiltered.map((song) => ({
+        id: song.id,
+        name: song.title,
+        artists: song["artist-credit"].map((artistObj) => {
+          return { name: artistObj.name, id: artistObj.artist.id };
+        }),
+        type: "song",
+      }));
+      songsSearchCache.set(name, result);
+      const paginated_songs = getPaginatedResults(
+        songsSearchCache.get(name),
+        page,
+        limit
+      );
+      const data = {
+        total_count_songs: result.length,
+        count_songs: paginated_songs.length,
+        paginated_songs: paginated_songs,
+      };
+      return data;
+    } catch (err) {
+      console.error(`[searchSongs] Error: ${err.message}`);
+      return [];
     }
   }
 }

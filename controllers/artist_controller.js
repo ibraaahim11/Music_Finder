@@ -10,7 +10,7 @@ const headers = {
   "User-Agent": "MusicFinder/1.0 ( exchangegiftsnow@yahoo.com )",
 };
 
-const searchCache = new Map(); // key : value -> name : sortedFilter object
+const artistsSearchCache = new Map(); // key : value -> name : sortedFilter object
 
 // function to get data of album from full id
 export async function getArtistData(artistId) {
@@ -22,10 +22,11 @@ export async function getArtistData(artistId) {
       headers: headers,
     });
 
-    // get 5 songs from artist
-    const songs = await getSongsByArtistId(artistId, 5);
-    // get 5 albums from artist
-    const albums = await getAlbumsByArtistId(artistId, 5);
+    // get 5 songs and 5 albums from artist + run in parallel
+    const [songs, albums] = await Promise.all([
+      getSongsByArtistId(artistId, 5),
+      getAlbumsByArtistId(artistId, 5),
+    ]);
 
     // create object with data
     const artistData = {
@@ -48,14 +49,15 @@ export async function getArtistData(artistId) {
 
 export async function searchArtists(name, page, limit) {
   name = name.trim().toLowerCase();
-  if (searchCache.has(name)) {
-    return getPaginatedResults(searchCache.get(name), page, limit);
+  if (artistsSearchCache.has(name)) {
+    return getPaginatedResults(artistsSearchCache.get(name), page, limit);
   } else {
     try {
       const response = await axios.get(`${MB_URL}/artist`, {
         params: {
           query: name,
           fmt: "json",
+          limit:100
         },
         headers: headers,
       });
@@ -70,7 +72,7 @@ export async function searchArtists(name, page, limit) {
         type: "artist",
       }));
 
-      searchCache.set(name, result);
+      artistsSearchCache.set(name, result);
       return getPaginatedResults(result, page, limit);
     } catch (err) {
       console.error(`[searchArtists] Error: ${err.message}`);

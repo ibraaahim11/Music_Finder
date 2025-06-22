@@ -2,10 +2,12 @@ import express from "express";
 import {
   getSongData,
   getSongsByArtistId,
+  searchSongs,
 } from "./controllers/song_controller.js";
 import {
   getAlbumData,
   getAlbumsByArtistId,
+  searchAlbums
 } from "./controllers/album_controller.js";
 import {
   getArtistData,
@@ -22,18 +24,21 @@ app.get("/", (req, res) => {
 });
 
 app.get("/search", async (req, res) => {
-  const { query, type, page } = req.query;
+  let { query, type, page } = req.query;
   // perform search logic here
   let results;
+  query = query.trim().toLowerCase();
   switch (type) {
     case "artist":
-
-      results = await searchArtists(query.trim().toLowerCase(), page, PAGE_LIMIT);
+      results = await searchArtists(query, page, PAGE_LIMIT);
 
       break;
     case "song":
+      results = await searchSongs(query, page, PAGE_LIMIT);
+
       break;
     case "album":
+            results = await searchAlbums(query, page, PAGE_LIMIT);
       break;
   }
   res.send(results);
