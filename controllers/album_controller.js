@@ -1,6 +1,9 @@
 import axios from "axios";
 import { getCoverImageUrl } from "./coverImage_controller.js";
-import { getPaginatedResults } from "./utils_controller.js";
+import {
+  getPaginatedResults,
+  filterDuplicateEntries,
+} from "./utils_controller.js";
 // Url of the MusicBrainz API
 const MB_URL = "https://musicbrainz.org/ws/2";
 // header included with MusicBrainz API requests
@@ -83,10 +86,13 @@ export async function getAlbumsByArtistId(artistId, limit, page = 1) {
       headers: headers,
     });
 
+    const filtered_data = filterDuplicateEntries(
+      response_albums.data["release-groups"]
+    );
     // // Get detailed data for each release-group
     // // await promise.all means do all these functions in parallel and wait for all of them to finish
     const albums = await Promise.all(
-      response_albums.data["release-groups"].map(async (album) => {
+      filtered_data.map(async (album) => {
         try {
           // Wait for the full group data
           const groupRes = await getGroupResForGroup(album.id);
@@ -112,7 +118,7 @@ export async function getAlbumsByArtistId(artistId, limit, page = 1) {
 
     // Build the response object
     const albums_data = {
-      total_count_albums: response_albums.data["release-group-count"],
+      total_count_albums: filtered_data.length,
       count_albums: albums.length,
       albums: albums,
     };
@@ -147,7 +153,7 @@ export async function searchAlbums(name, page, limit) {
         params: {
           query: name,
           fmt: "json",
-          limit: 100
+          limit: 100,
         },
         headers: headers,
       });

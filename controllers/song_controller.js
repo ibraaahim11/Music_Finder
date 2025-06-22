@@ -1,11 +1,11 @@
 import axios from "axios";
 import { getCoverImageUrl } from "./coverImage_controller.js";
-import { getPaginatedResults } from "./utils_controller.js";
+import { getPaginatedResults,filterDuplicateEntries } from "./utils_controller.js";
 // Url of the MusicBrainz, and lyrics.ovh api
 const MB_URL = "https://musicbrainz.org/ws/2";
 const LYRICS_OVH_URL = "https://api.lyrics.ovh/v1";
 
-// header included with MusicBrainz API requests
+// header included with MusicBrainz API requests.
 const headers = {
   "User-Agent": "MusicFinder/1.0 ( exchangegiftsnow@yahoo.com )",
 };
@@ -74,7 +74,7 @@ export async function getSongsByArtistId(artistId, limit, page = 1) {
         headers: headers,
       });
 
-      filtered_songs = filterSongs(response_songs.data.recordings);
+      filtered_songs = filterDuplicateEntries(response_songs.data.recordings);
       artistSongsCache.set(artistId, filtered_songs);
     }
     const chosen_songs = getPaginatedResults(filtered_songs, page, limit);
@@ -94,34 +94,6 @@ export async function getSongsByArtistId(artistId, limit, page = 1) {
   }
 }
 
-// Takes list of song entities and returns filtered list with no duplicates or unofficial songs
-function filterSongs(songs) {
-  const seenTitles = new Set();
-  const unwantedWords = [
-    "live",
-    "remix",
-    "demo",
-    "instrumental",
-    "version",
-    "edit",
-    "music video",
-    "behind the scenes",
-  ];
-
-  const isClean = (title) =>
-    !unwantedWords.some((word) => title.toLowerCase().includes(word));
-
-  const filtered_songs = [];
-
-  songs.forEach((song) => {
-    if (isClean(song.title) && !seenTitles.has(song.title)) {
-      seenTitles.add(song.title);
-      filtered_songs.push(song);
-    }
-  });
-
-  return filtered_songs;
-}
 
 // function to get lyrics given artist, title using lyrics.ovh api
 async function getLyrics(artist, title) {
@@ -175,9 +147,12 @@ export async function searchSongs(name, page, limit) {
         limit:100
       });
 
-      const sortedFiltered = response.data.recordings
+      let sortedFiltered = response.data.recordings
         .sort((a, b) => b.score - a.score)
         .filter((recording) => recording.score >= 90);
+
+  
+
 
       const result = sortedFiltered.map((song) => ({
         id: song.id,
