@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getSongsByArtistId } from "./song_controller.js";
 import { getAlbumsByArtistId } from "./album_controller.js";
+import { getPaginatedResults } from "./utils_controller.js";
 
 // Url of the MusicBrainz API
 const MB_URL = "https://musicbrainz.org/ws/2";
@@ -8,6 +9,8 @@ const MB_URL = "https://musicbrainz.org/ws/2";
 const headers = {
   "User-Agent": "MusicFinder/1.0 ( exchangegiftsnow@yahoo.com )",
 };
+
+const searchCache = new Map(); // key : value -> name : sortedFilter object
 
 // function to get data of album from full id
 export async function getArtistData(artistId) {
@@ -38,9 +41,40 @@ export async function getArtistData(artistId) {
     };
 
     return artistData;
-
-   
   } catch (err) {
     console.log(`Error [getArtistData] for ${artistId}: ` + err.message);
+  }
+}
+
+export async function searchArtists(name, page, limit) {
+  name = name.trim().toLowerCase();
+  if (searchCache.has(name)) {
+    return getPaginatedResults(searchCache.get(name), page, limit);
+  } else {
+    try {
+      const response = await axios.get(`${MB_URL}/artist`, {
+        params: {
+          query: name,
+          fmt: "json",
+        },
+        headers: headers,
+      });
+
+      const sortedFiltered = response.data.artists
+        .sort((a, b) => b.score - a.score)
+        .filter((artist) => artist.score >= 90);
+
+      const result = sortedFiltered.map((artist) => ({
+        id: artist.id,
+        name: artist.name,
+        type: "artist",
+      }));
+
+      searchCache.set(name, result);
+      return getPaginatedResults(result, page, limit);
+    } catch (err) {
+      console.error(`[searchArtists] Error: ${err.message}`);
+      return [];
+    }
   }
 }

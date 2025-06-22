@@ -7,7 +7,10 @@ import {
   getAlbumData,
   getAlbumsByArtistId,
 } from "./controllers/album_controller.js";
-import { getArtistData } from "./controllers/artist_controller.js";
+import {
+  getArtistData,
+  searchArtists,
+} from "./controllers/artist_controller.js";
 
 const app = express();
 const PORT = 3000;
@@ -16,6 +19,55 @@ const PAGE_LIMIT = 12;
 // Homepage
 app.get("/", (req, res) => {
   res.send("homepage");
+});
+
+app.get("/search", async (req, res) => {
+  const { query, type, page } = req.query;
+  // perform search logic here
+  let results;
+  switch (type) {
+    case "artist":
+
+      results = await searchArtists(query.trim().toLowerCase(), page, PAGE_LIMIT);
+
+      break;
+    case "song":
+      break;
+    case "album":
+      break;
+  }
+  res.send(results);
+
+  // 1) perform actual search requests with api
+  // 2) return data that consists of
+
+  /*
+  - total num of results
+  - the actual results 
+  - maybe 12 per page
+  - artists:
+    - name
+    - also say enohom artist (type)
+    - id 
+    -pic if possible
+  -song:
+    -id
+    -name
+    -also say enaha song (type)
+    - artist
+    - pic / cover
+
+  -albums:
+    -id
+    -name
+    -also say enaha album (type)
+    - artist
+    - pic / cover
+
+
+
+
+  */
 });
 
 // Page of full song
