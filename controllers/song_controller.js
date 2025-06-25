@@ -1,6 +1,9 @@
 import axios from "axios";
 import { getCoverImageUrl } from "./coverImage_controller.js";
-import { getPaginatedResults,filterDuplicateEntries } from "./utils_controller.js";
+import {
+  getPaginatedResults,
+  filterDuplicateEntries,
+} from "./utils_controller.js";
 // Url of the MusicBrainz, and lyrics.ovh api
 const MB_URL = "https://musicbrainz.org/ws/2";
 const LYRICS_OVH_URL = "https://api.lyrics.ovh/v1";
@@ -46,12 +49,15 @@ export async function getSongData(songId) {
       getLyrics(songData.artists[0]?.name || "", songData.title),
     ]);
 
+    // if promise fulfilled -> put value, else put null
     songData.cover_url = cover.status === "fulfilled" ? cover.value : null;
     songData.lyrics = lyrics.status === "fulfilled" ? lyrics.value : null;
 
     return songData;
   } catch (err) {
     console.log(`Error [getSongData] for ${songId}: ` + err.message);
+    // after logging -> throw to outer try catch 
+     throw err;
   }
 }
 
@@ -91,9 +97,9 @@ export async function getSongsByArtistId(artistId, limit, page = 1) {
     return songs_data;
   } catch (err) {
     console.log(`Error [getSongsByArtistId] for ${artistId}: ` + err.message);
+    throw err;
   }
 }
-
 
 // function to get lyrics given artist, title using lyrics.ovh api
 async function getLyrics(artist, title) {
@@ -122,7 +128,6 @@ async function getLyrics(artist, title) {
 export async function searchSongs(name, page, limit) {
   name = name.trim().toLowerCase();
   if (songsSearchCache.has(name)) {
-   
     const paginated_songs = getPaginatedResults(
       songsSearchCache.get(name),
       page,
@@ -141,18 +146,15 @@ export async function searchSongs(name, page, limit) {
           query: name,
           inc: "artist-credits",
           fmt: "json",
-          limit: 100
+          limit: 100,
         },
         headers: headers,
-        limit:100
+        limit: 100,
       });
 
       let sortedFiltered = response.data.recordings
         .sort((a, b) => b.score - a.score)
         .filter((recording) => recording.score >= 90);
-
-  
-
 
       const result = sortedFiltered.map((song) => ({
         id: song.id,

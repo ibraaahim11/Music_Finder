@@ -66,6 +66,7 @@ export async function getAlbumData(releaseGroupId) {
     console.error(
       `Error in getAlbumData for release group ${releaseGroupId}: ${err.message}`
     );
+    throw err;
   }
 }
 
@@ -130,6 +131,7 @@ export async function getAlbumsByArtistId(artistId, limit, page = 1) {
         err?.message || "Unknown error"
       }`
     );
+    throw err;
   }
 }
 

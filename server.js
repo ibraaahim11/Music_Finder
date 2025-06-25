@@ -7,7 +7,7 @@ import {
 import {
   getAlbumData,
   getAlbumsByArtistId,
-  searchAlbums
+  searchAlbums,
 } from "./controllers/album_controller.js";
 import {
   getArtistData,
@@ -28,51 +28,26 @@ app.get("/search", async (req, res) => {
   // perform search logic here
   let results;
   query = query.trim().toLowerCase();
-  switch (type) {
-    case "artist":
-      results = await searchArtists(query, page, PAGE_LIMIT);
+  try {
+    switch (type) {
+      case "artist":
+        results = await searchArtists(query, page, PAGE_LIMIT);
 
-      break;
-    case "song":
-      results = await searchSongs(query, page, PAGE_LIMIT);
+        break;
+      case "song":
+        results = await searchSongs(query, page, PAGE_LIMIT);
 
-      break;
-    case "album":
-            results = await searchAlbums(query, page, PAGE_LIMIT);
-      break;
+        break;
+      case "album":
+        results = await searchAlbums(query, page, PAGE_LIMIT);
+        break;
+    }
+    res.send(results);
+  } catch (err) {
+    console.log(
+      `Error [/search] (query = ${query}, page = ${page}): ` + err.message
+    );
   }
-  res.send(results);
-
-  // 1) perform actual search requests with api
-  // 2) return data that consists of
-
-  /*
-  - total num of results
-  - the actual results 
-  - maybe 12 per page
-  - artists:
-    - name
-    - also say enohom artist (type)
-    - id 
-    -pic if possible
-  -song:
-    -id
-    -name
-    -also say enaha song (type)
-    - artist
-    - pic / cover
-
-  -albums:
-    -id
-    -name
-    -also say enaha album (type)
-    - artist
-    - pic / cover
-
-
-
-
-  */
 });
 
 // Page of full song
@@ -80,33 +55,45 @@ app.get("/song/:id", async (req, res) => {
   const songId = req.params.id;
 
   // full data
-  const songData = await getSongData(songId);
+  try {
+    const songData = await getSongData(songId);
 
-  // console.log(songData);
+    // console.log(songData);
 
-  res.send(songData);
+    res.send(songData);
+  } catch (err) {
+    console.log(`Error [/song/${songId}]: ` + err.message);
+  }
 });
 
 // Page of full album
 app.get("/album/:id", async (req, res) => {
   const albumId = req.params.id;
   // full data
-  const albumData = await getAlbumData(albumId);
+  try {
+    const albumData = await getAlbumData(albumId);
 
-  // console.log(albumData);
+    // console.log(albumData);
 
-  res.send(albumData);
+    res.send(albumData);
+  } catch (err) {
+    console.log(`Error [/artist/${albumId}]: ` + err.message);
+  }
 });
 
 // Page of full artist
 app.get("/artist/:id", async (req, res) => {
   const artistId = req.params.id;
   // full data
-  const artistData = await getArtistData(artistId);
+  try {
+    const artistData = await getArtistData(artistId);
 
-  // console.log(artistData);
+    // console.log(artistData);
 
-  res.send(artistData);
+    res.send(artistData);
+  } catch (err) {
+    console.log(`Error [/artist/${artistId}]: ` + err.message);
+  }
 });
 
 // Page of full artist songs
@@ -114,21 +101,29 @@ app.get("/artist/:id/songs", async (req, res) => {
   const artistId = req.params.id;
   const page = parseInt(req.query.page) || 1;
 
-  const songs = await getSongsByArtistId(artistId, PAGE_LIMIT, page);
+  try {
+    const songs = await getSongsByArtistId(artistId, PAGE_LIMIT, page);
 
-  // console.log(songs);
+    // console.log(songs);
 
-  res.send(songs);
+    res.send(songs);
+  } catch (err) {
+    console.log(`Error [/artist/${artistId}/songs]: ` + err.message);
+  }
 });
 
 // Page of full artist albums
 app.get("/artist/:id/albums", async (req, res) => {
   const artistId = req.params.id;
   const page = parseInt(req.query.page) || 1;
-  const albums = await getAlbumsByArtistId(artistId, PAGE_LIMIT, page);
+  try {
+    const albums = await getAlbumsByArtistId(artistId, PAGE_LIMIT, page);
 
-  // console.log(albums);
-  res.send(albums);
+    // console.log(albums);
+    res.send(albums);
+  } catch (err) {
+    console.log(`Error [/artist/${artistId}/albums]: ` + err.message);
+  }
 });
 
 app.listen(PORT, () => {

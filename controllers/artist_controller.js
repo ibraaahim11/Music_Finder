@@ -44,6 +44,7 @@ export async function getArtistData(artistId) {
     return artistData;
   } catch (err) {
     console.log(`Error [getArtistData] for ${artistId}: ` + err.message);
+    throw err;
   }
 }
 

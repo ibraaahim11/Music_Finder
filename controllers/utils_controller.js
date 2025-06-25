@@ -1,6 +1,6 @@
 
 
-
+// function to pass a list, page number, and limit of elements per page -> to return correct sublist
 export function getPaginatedResults(list, page, limit) {
   const offset = (page - 1) * limit;
   try {
@@ -12,7 +12,7 @@ export function getPaginatedResults(list, page, limit) {
   }
 }
 
-// Takes list of  entities and returns filtered list with no duplicates or unofficial entities
+// Takes list of entities (songs) and returns filtered list with no duplicates or unofficial entities
 export function filterDuplicateEntries(entries) {
   const seenTitles = new Set();
   const unwantedWords = [
