@@ -1,4 +1,5 @@
 import express from "express";
+import expressLayouts from "express-ejs-layouts";
 import {
   getSongData,
   getSongsByArtistId,
@@ -14,13 +15,23 @@ import {
   searchArtists,
 } from "./controllers/artist_controller.js";
 
-const app = express();
 const PORT = 3000;
-
 const PAGE_LIMIT = 12;
+
+// create app
+const app = express();
+
+app.set("view engine", "ejs");
+// activates layout middleware
+app.use(expressLayouts);
+// sets default layout file to be views/layout.ejs
+app.set("layout", "layout");
+// static files will be in public/
+app.use(express.static("public"));
+
 // Homepage
 app.get("/", (req, res) => {
-  res.send("homepage");
+  res.render("pages/home", { title: "home" });
 });
 
 app.get("/search", async (req, res) => {
