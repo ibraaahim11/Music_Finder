@@ -58,7 +58,7 @@ export async function searchArtists(name, page, limit) {
         params: {
           query: name,
           fmt: "json",
-          limit:100
+          limit: 100,
         },
         headers: headers,
       });
@@ -74,7 +74,13 @@ export async function searchArtists(name, page, limit) {
       }));
 
       artistsSearchCache.set(name, result);
-      return getPaginatedResults(result, page, limit);
+      const paginated_artists = getPaginatedResults(result, page, limit);
+      const data = {
+        total_count_artists: result.length,
+        count_artists: paginated_artists.length,
+        paginated_artists: paginated_artists,
+      };
+      return data;
     } catch (err) {
       console.error(`[searchArtists] Error: ${err.message}`);
       return [];
