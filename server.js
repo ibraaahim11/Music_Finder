@@ -41,16 +41,17 @@ app.get("/search", async (req, res) => {
   query = query.trim().toLowerCase();
   try {
     switch (type) {
-      case "artist":
-        results = await searchArtists(query, page, PAGE_LIMIT);
-
-        break;
       case "song":
         results = await searchSongs(query, page, PAGE_LIMIT);
 
         break;
       case "album":
         results = await searchAlbums(query, page, PAGE_LIMIT);
+        break;
+      // default or artist
+      default:
+        results = await searchArtists(query, page, PAGE_LIMIT);
+
         break;
     }
     res.send(results);

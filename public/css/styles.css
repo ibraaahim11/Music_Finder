@@ -1,0 +1,69 @@
+.logo-div {
+  color: black;
+}
+.logo-div > img {
+  width: 25px;
+}
+.navbar {
+  background-color: #e3f2fd;
+}
+.icon-radio {
+  width: 45px;
+  height: 45px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: 0.3s;
+}
+.btn-check:checked + .btn {
+  border-color: white;
+}
+
+.icon-img {
+  width: 25px;
+  height: 25px;
+}
+/* General checked styling */
+.btn-check:checked + .icon-radio {
+  background-color: #86b7fe; /* Pick the color you like */
+}
+
+/* Optional: Change the icon color (if SVG uses currentColor) */
+.btn-check:checked + .icon-radio .icon-img {
+  filter: brightness(0) invert(1); /* Makes black icons white */
+}
+
+.nav-search {
+  min-width: 300px;
+  transition: all 0.3s ease;
+}
+.lottie-background {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 75vw; /* or fixed px like 600px */
+  height: 75vh; /* or fixed px like 400px */
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.lottie-background lottie-player {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+}
+
+.hero-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 75vh; /* full screen height */
+  padding: 2rem;
+  background: transparent; /* or your background */
+}
+.main-search {
+  border: 2px solid #86b7fe;
+}

@@ -1,1 +1,33 @@
-THIS IS THE HOME.EJS
+<div
+  class="d-flex justify-content-center align-items-center text-center"
+  style="height: calc(100vh - 178px); overflow: hidden"
+>
+  <div class="lottie-background">
+    <lottie-player
+      src="/animations/circular-wave.json"
+      background="transparent"
+      speed="0.5"
+      loop
+      autoplay
+    ></lottie-player>
+  </div>
+
+  <div class="container px-4">
+    <h1 class="display-5 fw-bold text-body-emphasis">MusicFinder</h1>
+    <div class="col-lg-6 mx-auto">
+      <p class="lead mb-4 fw-semibold text-secondary">
+        MusicFinder helps you explore artists, albums, and songs with ease.
+      </p>
+      <div class="col-12">
+        <form role="search" class="w-100">
+          <input
+            class="form-control rounded-pill nav-search py-3 px-3 text-center fs-5 main-search"
+            placeholder="Type here to search..."
+            type="search"
+            aria-label="Search"
+          />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

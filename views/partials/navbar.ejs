@@ -1,0 +1,57 @@
+<nav class="navbar navbar-expand-md">
+  <div class="container-fluid">
+    <a class="navbar-brand ms-3" href="/">
+      <div class="logo-div">
+        <img src="/images/music-note-list.svg" alt="Logo" /> MusicFinder
+      </div>
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarContent"
+      aria-controls="navbarContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse mt-3 mt-md-0" id="navbarContent">
+      <div class="container">
+        <div class="row justify-content-center justify-content-md-end align-items-center">
+          <!-- Radio buttons: row on all screen sizes -->
+          <div class="col-12 col-md-auto d-flex justify-content-center gap-2 mb-2 mb-md-0">
+            <input type="radio" class="btn-check" name="search-options" id="artist" autocomplete="off" checked />
+            <label class="btn rounded-circle icon-radio" for="artist">
+              <img src="/images/artist.svg" alt="Artist icon" class="icon-img" />
+            </label>
+
+            <input type="radio" class="btn-check" name="search-options" id="album" autocomplete="off" />
+            <label class="btn rounded-circle icon-radio" for="album">
+              <img src="/images/album-2.svg" alt="Album icon" class="icon-img" />
+            </label>
+
+            <input type="radio" class="btn-check" name="search-options" id="song" autocomplete="off" />
+            <label class="btn rounded-circle icon-radio" for="song">
+              <img src="/images/song.svg" alt="Song icon" class="icon-img" />
+            </label>
+          </div>
+
+          <!-- Search bar: stacked on small, inline on md+ -->
+          <div class="col-12 col-md-auto d-flex justify-content-center ps-0">
+            <form role="search" class="w-100" style="max-width: 600px;">
+              <input
+                class="form-control rounded-pill nav-search"
+                placeholder="Search for artists, albums, songs..."
+                type="search"
+                aria-label="Search"
+              />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
