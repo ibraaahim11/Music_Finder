@@ -37,7 +37,7 @@ export async function getArtistData(artistId) {
       total_count_albums: albums["total_count_albums"],
       albums_5: {
         count_albums: albums["count_albums"],
-        albums: albums["albums"],
+        albums: albums["paginated_albums"],
       },
     };
 
@@ -51,7 +51,16 @@ export async function getArtistData(artistId) {
 export async function searchArtists(name, page, limit) {
   name = name.trim().toLowerCase();
   if (artistsSearchCache.has(name)) {
-    return getPaginatedResults(artistsSearchCache.get(name), page, limit);
+   const result = artistsSearchCache.get(name);
+    const paginated_artists = getPaginatedResults(result, page, limit);
+    const data = {
+      total_count_artists: result.length,
+      count_artists: paginated_artists.length,
+      paginated_artists: paginated_artists || [],
+    };
+    return data;
+
+
   } else {
     try {
       const response = await axios.get(`${MB_URL}/artist`, {
@@ -78,7 +87,7 @@ export async function searchArtists(name, page, limit) {
       const data = {
         total_count_artists: result.length,
         count_artists: paginated_artists.length,
-        paginated_artists: paginated_artists,
+        paginated_artists: paginated_artists || [],
       };
       return data;
     } catch (err) {

@@ -1,0 +1,38 @@
+<div class="container-fluid mt-5 px-5">
+  <div class="row align-items-start">
+    <!-- Left: Cover + Info -->
+    <div class="col-md-4 text-center text-md-start mb-4 left-sticky">
+      <img
+        src="<%= song.cover_url || '/images/cover-not-found.png' %>"
+        alt="Cover Art"
+        class="img-fluid rounded shadow mb-3"
+        style="max-width: 250px"
+      />
+
+      <h2 class="fw-bold"><%= song.title %></h2>
+      <div class="text-muted mb-2">
+        by <%= song.artists.map(artist => artist.name).join(", ") %>
+      </div>
+
+      <% if (song.release_date) { %>
+      <p class="text-secondary">
+        Released <strong><%= song.release_date %></strong>
+      </p>
+      <% } %>
+    </div>
+
+    <!-- Right: Lyrics -->
+    <div class="col-md-8">
+      <div class="bg-white p-4 rounded shadow-lg lyrics-box">
+        <h4 class="fw-semibold mb-3" style="color: #60b5f3">Lyrics</h4>
+        <pre class="lyrics-text">
+<% if (song.lyrics) { %>
+<%= song.lyrics %>
+<% } else { %>
+<p class="not-available">Not available</p>
+<% } %>
+        </pre>
+      </div>
+    </div>
+  </div>
+</div>

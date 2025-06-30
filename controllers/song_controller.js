@@ -30,14 +30,23 @@ export async function getSongData(songId) {
       },
       headers: headers,
     });
+    const rawDate = response.data["first-release-date"];
 
+    let releaseDateFormatted = null;
+    if (rawDate) {
+      const date = new Date(rawDate);
+      releaseDateFormatted = new Intl.DateTimeFormat("en-US", {
+        month: "long",
+        year: "numeric",
+      }).format(date);
+    }
     // creating object with needed ids
     const songData = {
       id: response.data.id,
       title: response.data.title,
       releaseId: response.data.releases?.[0]?.id,
       cover_url: null,
-      release_date: response.data["first-release-date"],
+      release_date: releaseDateFormatted,
       artists: response.data["artist-credit"].map((artistObj) => {
         return { name: artistObj.name, id: artistObj.artist.id };
       }),
@@ -56,8 +65,8 @@ export async function getSongData(songId) {
     return songData;
   } catch (err) {
     console.log(`Error [getSongData] for ${songId}: ` + err.message);
-    // after logging -> throw to outer try catch 
-     throw err;
+    // after logging -> throw to outer try catch
+    throw err;
   }
 }
 
@@ -106,7 +115,7 @@ async function getLyrics(artist, title) {
   // see if lyrics cached
   const key = `${artist}::${title}`;
   if (lyricsCache.has(key)) {
-    console.log("lyrics cached");
+    console.log("used lyrics cache");
     return lyricsCache.get(key);
   } else {
     try {
@@ -136,7 +145,7 @@ export async function searchSongs(name, page, limit) {
     const data = {
       total_count_songs: songsSearchCache.get(name).length,
       count_songs: paginated_songs.length,
-      paginated_songs: paginated_songs,
+      paginated_songs: paginated_songs || [],
     };
     return data;
   } else {
@@ -173,11 +182,11 @@ export async function searchSongs(name, page, limit) {
       const data = {
         total_count_songs: result.length,
         count_songs: paginated_songs.length,
-        paginated_songs: paginated_songs,
+        paginated_songs: paginated_songs || [],
       };
       return data;
     } catch (err) {
-      console.error(`[searchSongs] Error: ${err.message}`);
+      console.error(`[searchSongs] Error: ${toString(err.message)}`);
       return [];
     }
   }

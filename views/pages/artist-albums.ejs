@@ -1,0 +1,41 @@
+<div class="container-fluid mt-5 px-5">
+  <!-- Page Title -->
+  <div class="mb-4">
+    <h1 class="fw-bold text-black">Albums</h1>
+  </div>
+
+  <!-- Albums Grid -->
+  <div class="row g-4">
+    <% albums["paginated_albums"].forEach((album) => { if (album) { %>
+      <div class="col-6 col-md-3 col-lg-2">
+        <a href="/album/<%= album.id %>" class="text-decoration-none text-dark">
+          <div class="card h-100 shadow-sm border-0 album-card">
+            <img
+              src="<%= album.cover_url || '/images/cover-not-found.png' %>"
+              class="card-img-top rounded"
+              alt="<%= album.title %>"
+            />
+            <div class="card-body px-2 py-3 text-center">
+              <h6 class="fw-semibold text-truncate"><%= album.title %></h6>
+            </div>
+          </div>
+        </a>
+      </div>
+    <% } }); %>
+  </div>
+
+  <!-- Pagination -->
+  <% const totalPages = Math.ceil(albums.total_count_albums / 6); %>
+  <% if (totalPages > 1) { %>
+    <nav class="d-flex justify-content-center mt-4">
+      <ul class="pagination custom-pagination">
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <%= i === Number(page) ? 'active' : '' %>">
+            <a class="page-link" href="/artist/<%= artistId%>/albums?page=<%= i %>"><%= i %></a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+  <% } %>
+</div>
+

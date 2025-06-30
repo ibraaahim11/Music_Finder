@@ -24,6 +24,16 @@
   width: 25px;
   height: 25px;
 }
+
+.hero .icon-radio {
+  width: 60px;
+  height: 60px;
+}
+.hero .icon-img {
+  width: 35px;
+  height: 35px;
+}
+
 /* General checked styling */
 .btn-check:checked + .icon-radio {
   background-color: #86b7fe; /* Pick the color you like */
@@ -66,4 +76,132 @@
 }
 .main-search {
   border: 2px solid #86b7fe;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+.page-link {
+  color: #212529;
+}
+
+.page-item.active .page-link {
+  background-color: #1db954;
+  border-color: #1db954;
+  color: white;
+}
+.custom-pagination .page-link {
+  color: #0d6efd;
+  border: none;
+  margin: 0 4px;
+  padding: 0.5rem 1.2rem; /* wider, shorter */
+  font-size: 1rem;
+  background-color: #f1f8ff;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.custom-pagination .page-item.active .page-link {
+  background-color: #86b7fe;
+  color: white;
+  font-weight: 600;
+}
+
+.custom-pagination .page-link:hover {
+  background-color: #d6eaff;
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.list-group-item {
+  transition: all 0.2s ease-in-out;
+  background-color: #f8f9fa; /* default background */
+  border-radius: 8px;
+}
+
+.list-group-item:hover {
+  background-color: #60b5f3 !important; /* 🎨 Your hover color */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* 💨 Soft shadow */
+  color: white !important;
+  transform: translateY(-1px);
+}
+
+.list-group-item:hover span,
+.list-group-item:hover i {
+  color: white;
+}
+
+.list-group-item span {
+  transition: color 0.2s;
+}
+
+.album-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.album-card:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  background-color: #f0f8ff;
+}
+.not-available {
+  color: #888; /* light gray */
+  font-style: italic;
+  font-size: 0.95rem;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.full-height-row {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.left-fixed {
+  height: 100%;
+  overflow: hidden;
+  position: sticky;
+  top: 0;
+}
+
+.right-scroll {
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.lyrics-box {
+  min-height: 100%;
+}
+
+pre.lyrics-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.left-sticky {
+  position: sticky;
+  top: 5rem; /* Adjust as needed (depends on navbar height) */
+  align-self: start;
+}
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1030;
+}
+body {
+  padding-top: 70px; /* Adjust based on navbar height */
 }

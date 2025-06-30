@@ -16,7 +16,7 @@ import {
 } from "./controllers/artist_controller.js";
 
 const PORT = 3000;
-const PAGE_LIMIT = 12;
+const PAGE_LIMIT = 6;
 
 // create app
 const app = express();
@@ -31,30 +31,51 @@ app.use(express.static("public"));
 
 // Homepage
 app.get("/", (req, res) => {
-  res.render("pages/home", { title: "home" });
+  res.render("pages/home");
 });
 
 app.get("/search", async (req, res) => {
-  let { query, type, page } = req.query;
+  let { query, search_option, page } = req.query;
   // perform search logic here
   let results;
+  page = page ? page : 1;
   query = query.trim().toLowerCase();
   try {
-    switch (type) {
+    switch (search_option) {
       case "song":
         results = await searchSongs(query, page, PAGE_LIMIT);
+        res.render("pages/search-songs", {
+          results: results,
+          query: query,
+          page: page,
+          search_option: search_option,
+        });
+        console.log(results);
 
         break;
       case "album":
         results = await searchAlbums(query, page, PAGE_LIMIT);
+        res.render("pages/search-albums", {
+          results: results,
+          query: query,
+          page: page,
+          search_option: search_option,
+        });
+        console.log(results);
         break;
       // default or artist
       default:
         results = await searchArtists(query, page, PAGE_LIMIT);
 
+        res.render("pages/search-artists", {
+          results: results,
+          query: query,
+          page: page,
+          search_option: search_option,
+        });
+
         break;
     }
-    res.send(results);
   } catch (err) {
     console.log(
       `Error [/search] (query = ${query}, page = ${page}): ` + err.message
@@ -70,9 +91,9 @@ app.get("/song/:id", async (req, res) => {
   try {
     const songData = await getSongData(songId);
 
-    // console.log(songData);
+    console.log(songData);
 
-    res.send(songData);
+    res.render("pages/song", { song: songData });
   } catch (err) {
     console.log(`Error [/song/${songId}]: ` + err.message);
   }
@@ -85,9 +106,9 @@ app.get("/album/:id", async (req, res) => {
   try {
     const albumData = await getAlbumData(albumId);
 
-    // console.log(albumData);
+    console.log(albumData);
 
-    res.send(albumData);
+    res.render("pages/album", { album: albumData });
   } catch (err) {
     console.log(`Error [/artist/${albumId}]: ` + err.message);
   }
@@ -102,7 +123,7 @@ app.get("/artist/:id", async (req, res) => {
 
     // console.log(artistData);
 
-    res.send(artistData);
+    res.render("pages/artist", { artist: artistData });
   } catch (err) {
     console.log(`Error [/artist/${artistId}]: ` + err.message);
   }
@@ -131,8 +152,7 @@ app.get("/artist/:id/albums", async (req, res) => {
   try {
     const albums = await getAlbumsByArtistId(artistId, PAGE_LIMIT, page);
 
-    // console.log(albums);
-    res.send(albums);
+    res.render("pages/artist-albums", { albums, page, artistId });
   } catch (err) {
     console.log(`Error [/artist/${artistId}/albums]: ` + err.message);
   }

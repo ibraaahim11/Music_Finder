@@ -18,14 +18,71 @@
       <p class="lead mb-4 fw-semibold text-secondary">
         MusicFinder helps you explore artists, albums, and songs with ease.
       </p>
-      <div class="col-12">
-        <form role="search" class="w-100">
+
+      <!-- Search Form -->
+      <div class="col-12 hero">
+        <form
+          role="search"
+          class="w-100"
+          action="/search"
+          method="get"
+          autocomplete="off"
+        >
+          <!-- Search Bar -->
           <input
             class="form-control rounded-pill nav-search py-3 px-3 text-center fs-5 main-search"
             placeholder="Type here to search..."
             type="search"
+            name="query"
             aria-label="Search"
           />
+
+          <!-- Styled Radio Buttons with Icons -->
+          <div class="d-flex justify-content-center gap-4 mt-4">
+            <!-- Bottom Section -->
+            <input
+              type="radio"
+              id="artist-hero"
+              name="search_option"
+              value="artist"
+              class="btn-check"
+              checked
+            />
+            <label for="artist-hero" class="btn rounded-circle icon-radio">
+              <img
+                src="/images/artist.svg"
+                alt="Artist icon"
+                class="icon-img"
+              />
+            </label>
+
+            <input
+              type="radio"
+              id="album-hero"
+              name="search_option"
+              value="album"
+              class="btn-check"
+            />
+            <label for="album-hero" class="btn rounded-circle icon-radio">
+              <img
+                src="/images/album-2.svg"
+                alt="Album icon"
+                class="icon-img"
+              />
+            </label>
+
+            <input
+              type="radio"
+              id="song-hero"
+              name="search_option"
+              value="song"
+              class="btn-check"
+              autocomplete="off"
+            />
+            <label for="song-hero" class="btn rounded-circle icon-radio">
+              <img src="/images/song.svg" alt="Song icon" class="icon-img" />
+            </label>
+          </div>
         </form>
       </div>
     </div>

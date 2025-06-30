@@ -1,0 +1,36 @@
+<div class="container-fluid mt-5 px-5">
+  <div class="row">
+    <!-- Left: Album Info -->
+    <div class="col-md-3 mb-4 text-center text-md-start">
+      <img src="<%= album.cover_url || '/images/cover-not-found.png' %>" class="img-fluid rounded shadow-sm mb-3" style="max-width: 250px;" alt="Album Cover">
+
+      <h2 class="fw-bold"><%= album.title %></h2>
+
+      <div class="text-muted mb-2">by 
+        <% album.artists.forEach((artist, i) => { %>
+          <%= artist.name %><%= i < album.artists.length - 1 ? ', ' : '' %>
+        <% }); %>
+      </div>
+
+      <!-- Release Date -->
+      <% if (album.release_date) { %>
+        <p class="text-secondary mb-1">Released <strong><%= album.release_date %></strong></p>
+      <% } %>
+
+      <p class="mb-1 text-secondary"><strong><%= album.numSongs %></strong> songs</p>
+    </div>
+
+    <!-- Right: Songs List -->
+    <div class="col-md-8">
+      <div class="list-group shadow-sm">
+        <% album.songs.forEach((song, index) => { %>
+          <a href="/song/<%= song.id %>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center song-row">
+            <div class="fw-semibold">
+              <%= index + 1 %>. <%= song.title %>
+            </div>
+          </a>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+</div>
