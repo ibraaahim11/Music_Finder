@@ -70,9 +70,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 75vh; /* full screen height */
+  min-height: 75vh; 
   padding: 2rem;
-  background: transparent; /* or your background */
+  background: transparent; 
 }
 .main-search {
   border: 2px solid #86b7fe;
@@ -105,7 +105,7 @@ main {
   color: #0d6efd;
   border: none;
   margin: 0 4px;
-  padding: 0.5rem 1.2rem; /* wider, shorter */
+  padding: 0.5rem 1.2rem; 
   font-size: 1rem;
   background-color: #f1f8ff;
   border-radius: 10px;
@@ -126,13 +126,13 @@ main {
 
 .list-group-item {
   transition: all 0.2s ease-in-out;
-  background-color: #f8f9fa; /* default background */
+  background-color: #f8f9fa; 
   border-radius: 8px;
 }
 
 .list-group-item:hover {
-  background-color: #60b5f3 !important; /* 🎨 Your hover color */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* 💨 Soft shadow */
+  background-color: #60b5f3 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
   color: white !important;
   transform: translateY(-1px);
 }
@@ -160,7 +160,7 @@ main {
   background-color: #f0f8ff;
 }
 .not-available {
-  color: #888; /* light gray */
+  color: #888; 
   font-style: italic;
   font-size: 0.95rem;
   text-align: center;
@@ -196,7 +196,7 @@ pre.lyrics-text {
 
 .left-sticky {
   position: sticky;
-  top: 5rem; /* Adjust as needed (depends on navbar height) */
+  top: 5rem; 
   align-self: start;
 }
 .navbar {
@@ -207,7 +207,7 @@ pre.lyrics-text {
   z-index: 1030;
 }
 body {
-  padding-top: 70px; /* Adjust based on navbar height */
+  padding-top: 70px;
 }
 
 .artist-link {
