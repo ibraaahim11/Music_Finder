@@ -1,6 +1,5 @@
 <a id="readme-top"></a>
-
-![LinkedIn][linkedin-shield][linkedin-url]
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?logo=linkedin)](https://www.linkedin.com/in/ibrahim-hesham-abdel-dayem-b00a9832a/)
 
 <!-- PROJECT LOGO -->
 <br />
@@ -51,7 +50,7 @@ The website has a sleek design with a calming pallete, and it is also mobile res
 
 Note: Website may be slow at times due to API restrictions. 😊
 
-[![Product Name Screen Shot][product-screenshot]]
+![Search Example](./public/images/readme-images/home-sample.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -81,27 +80,6 @@ Note: Website may be slow at times due to API restrictions. 😊
 
 Follow these steps so you can run MusicFinder locally.
 
-### Installation
-
-1. Clone the repo
-   ```sh
-   git clone https://github.com/ibraaahim11/Music_Finder.git
-   ```
-2. Install NPM packages
-
-   ```sh
-   npm install
-   ```
-
-3. Run the development server
-   ```sh
-   npm start
-   ```
-4. Open in browser
-   Go to http://localhost:3000 to explore the app.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- USAGE EXAMPLES -->
 
 ## 📖 Usage
@@ -130,6 +108,45 @@ _See album details and track list_
 ![Song Page](./public/images/readme-images/song.png)
 _Read lyrics and see song info_
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Prerequisites
+
+Before running this project, make sure you have the following installed on your machine:
+
+- [Node.js](https://nodejs.org/) (v16 or higher recommended)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
+- A web browser (e.g., Chrome, Firefox)
+- [Git](https://git-scm.com/) (for cloning the repository)
+
+To verify installation:
+
+```bash
+node -v
+npm -v
+git --version
+```
+
+### Installation
+
+1. Clone the repo
+
+   ```sh
+   git clone https://github.com/ibraaahim11/Music_Finder.git
+   ```
+
+2. Install NPM packages
+
+   ```sh
+   npm install
+   ```
+
+3. Run the development server
+   ```sh
+   npm start
+   ```
+4. Open in browser
+   Go to http://localhost:3000 to explore the app.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
