@@ -31,7 +31,7 @@
       <ul class="pagination custom-pagination">
         <% for (let i = 1; i <= totalPages; i++) { %>
           <li class="page-item <%= i === Number(page) ? 'active' : '' %>">
-            <a class="page-link" href="/artist/<%= artistId%>/albums?page=<%= i %>"><%= i %></a>
+            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
           </li>
         <% } %>
       </ul>

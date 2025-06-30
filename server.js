@@ -135,11 +135,13 @@ app.get("/artist/:id/songs", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
 
   try {
-    const songs = await getSongsByArtistId(artistId, PAGE_LIMIT, page);
+    const songs = await getSongsByArtistId(artistId, 12, page);
 
-    // console.log(songs);
+    res.render("pages/artist-songs", {
+      results: songs, 
+      page: page,
 
-    res.send(songs);
+    });
   } catch (err) {
     console.log(`Error [/artist/${artistId}/songs]: ` + err.message);
   }

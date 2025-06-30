@@ -1,0 +1,36 @@
+<div class="container-fluid mt-4 ps-5 pe-5">
+  <h1 class="fs-1 fw-bold mb-4">Songs</h1>
+
+  <div class="list-group">
+    <% results.songs.forEach(function(song) { %>
+      <a
+        href="/song/<%= song.id %>"
+        class="list-group-item list-group-item-action py-2 px-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center border-0 border-bottom text-decoration-none group-hover"
+      >
+        <div class="text-truncate" style="max-width: 100%">
+          <div class="fw-semibold text-dark" style="font-size: 0.95rem">
+            <%= song.title %>
+          </div>
+        </div>
+      </a>
+    <% }); %>
+  </div>
+
+  <% const totalPages = Math.ceil(results.total_count_songs / 12); %>
+  <% if (totalPages > 1) { %>
+    <nav class="d-flex justify-content-center mt-4">
+      <ul class="pagination custom-pagination">
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <%= i === Number(page) ? 'active' : '' %>">
+            <a
+              class="page-link"
+              href="?page=<%= i %>"
+            >
+              <%= i %>
+            </a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+  <% } %>
+</div>
