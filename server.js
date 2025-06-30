@@ -44,25 +44,38 @@ app.get("/search", async (req, res) => {
     switch (search_option) {
       case "song":
         results = await searchSongs(query, page, PAGE_LIMIT);
+        res.render("pages/search-songs", {
+          results: results,
+          query: query,
+          page: page,
+          search_option: search_option,
+        });
+        console.log(results);
 
         break;
       case "album":
         results = await searchAlbums(query, page, PAGE_LIMIT);
-
+        res.render("pages/search-albums", {
+          results: results,
+          query: query,
+          page: page,
+          search_option: search_option,
+        });
+        console.log(results);
         break;
       // default or artist
       default:
         results = await searchArtists(query, page, PAGE_LIMIT);
 
+        res.render("pages/search-artists", {
+          results: results,
+          query: query,
+          page: page,
+          search_option: search_option,
+        });
+
         break;
     }
-    res.render("pages/search-songs", {
-      results,
-      query,
-      page,
-      search_option,
-    });
-    console.log(results);
   } catch (err) {
     console.log(
       `Error [/search] (query = ${query}, page = ${page}): ` + err.message
@@ -125,8 +138,9 @@ app.get("/artist/:id/songs", async (req, res) => {
     const songs = await getSongsByArtistId(artistId, 12, page);
 
     res.render("pages/artist-songs", {
-      results: songs,
+      results: songs, 
       page: page,
+
     });
   } catch (err) {
     console.log(`Error [/artist/${artistId}/songs]: ` + err.message);
