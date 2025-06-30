@@ -15,7 +15,7 @@ import {
   searchArtists,
 } from "./controllers/artist_controller.js";
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const PAGE_LIMIT = 6;
 
 // create app
@@ -138,9 +138,8 @@ app.get("/artist/:id/songs", async (req, res) => {
     const songs = await getSongsByArtistId(artistId, 12, page);
 
     res.render("pages/artist-songs", {
-      results: songs, 
+      results: songs,
       page: page,
-
     });
   } catch (err) {
     console.log(`Error [/artist/${artistId}/songs]: ` + err.message);
