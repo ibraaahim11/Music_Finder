@@ -1,12 +1,12 @@
 <a id="readme-top"></a>
 
-[![LinkedIn][linkedin-shield]][linkedin-url]
+![LinkedIn][linkedin-shield][linkedin-url]
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/ibraaahim11/Music_Finder">
-    <img src="public/images/logo.png" alt="Logo" width="80" height="80">
+    <img src="public/images/logo.svg" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">MusicFinder</h3>
@@ -48,6 +48,8 @@ I created this project to get some practice using public API's with Express.js.
 MusicFinder has a vast knowledge of artists, albums, and songs. The search functionality returns only the most relevant results, and allows you to explore a vast catalog of music. You can dive deep into artists and view all their albums and songs. You will also find that the lyrics of the songs are also displayed.
 
 The website has a sleek design with a calming pallete, and it is also mobile responsive.
+
+Note: Website may be slow at times due to API restrictions. 😊
 
 [![Product Name Screen Shot][product-screenshot]]
 
