@@ -6,9 +6,12 @@
 
       <h2 class="fw-bold"><%= album.title %></h2>
 
-      <div class="text-muted mb-2">by 
+      <div class="text-muted mb-2">
+        by 
         <% album.artists.forEach((artist, i) => { %>
-          <%= artist.name %><%= i < album.artists.length - 1 ? ', ' : '' %>
+          <a href="/artist/<%= artist.id %>" class="fw-semibold artist-link">
+            <%= artist.name %>
+          </a><%= i < album.artists.length - 1 ? ', ' : '' %>
         <% }); %>
       </div>
 

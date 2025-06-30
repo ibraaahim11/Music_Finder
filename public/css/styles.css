@@ -137,6 +137,10 @@ main {
   transform: translateY(-1px);
 }
 
+.list-group-item:hover .text-dark {
+  color: white !important;
+}
+
 .list-group-item:hover span,
 .list-group-item:hover i {
   color: white;
@@ -204,4 +208,14 @@ pre.lyrics-text {
 }
 body {
   padding-top: 70px; /* Adjust based on navbar height */
+}
+
+.artist-link {
+  color: #60B5F3;
+  font-weight: 600;
+  text-decoration: none;
+}
+.artist-link:hover {
+  text-decoration: underline;
+  color: #378dd6;
 }

@@ -11,7 +11,10 @@
 
       <h2 class="fw-bold"><%= song.title %></h2>
       <div class="text-muted mb-2">
-        by <%= song.artists.map(artist => artist.name).join(", ") %>
+        by <% song.artists.forEach((artist, i) => { %>
+        <a href="/artist/<%= artist.id %>" class="artist-link">
+          <%= artist.name %> </a
+        ><%= i < song.artists.length - 1 ? ', ' : '' %> <% }); %>
       </div>
 
       <% if (song.release_date) { %>

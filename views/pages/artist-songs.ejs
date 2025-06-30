@@ -1,17 +1,15 @@
 <div class="container-fluid mt-4 ps-5 pe-5">
   <h1 class="fs-1 fw-bold mb-4">Songs</h1>
 
-  <div class="list-group">
-    <% results.songs.forEach(function(song) { %>
+  <div class="list-group shadow-sm">
+    <% results.songs.forEach(function(song, index) { %>
       <a
         href="/song/<%= song.id %>"
-        class="list-group-item list-group-item-action py-2 px-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center border-0 border-bottom text-decoration-none group-hover"
+        class="list-group-item list-group-item-action py-2 px-3 d-flex justify-content-between align-items-center"
       >
-        <div class="text-truncate" style="max-width: 100%">
-          <div class="fw-semibold text-dark" style="font-size: 0.95rem">
-            <%= song.title %>
-          </div>
-        </div>
+        <span class="fw-medium text-truncate" style="max-width: 100%">
+          <%= index + 1 %>. <%= song.title %>
+        </span>
       </a>
     <% }); %>
   </div>
