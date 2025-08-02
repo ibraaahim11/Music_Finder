@@ -63,7 +63,7 @@ Note: Website may be slow at times due to API restrictions. 😊
 [![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 [![EJS](https://img.shields.io/badge/EJS-8C8C8C?style=for-the-badge&logo=ejs&logoColor=white)](https://ejs.co/)
 
-## <a id="apis-used"></a>🌐 APIs Used
+## <a id="ap-is-used"></a>🌐 APIs Used
 
 - [MusicBrainz API](https://musicbrainz.org/doc/MusicBrainz_API) – for metadata like artists, albums, and songs
 - [Cover Art Archive](https://musicbrainz.org/doc/Cover_Art_Archive) – for fetching album artwork
