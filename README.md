@@ -39,7 +39,7 @@
 
 <!-- ABOUT THE PROJECT -->
 
-## <a id="about-the-project"></a>About The Project
+### <a id="about-the-project"></a>About The Project
 
 I created this project to get some practice using public API's with Express.js.
 
@@ -53,9 +53,7 @@ Note: Website may be slow at times due to API restrictions. 😊
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Built With
-
-## 🛠️ Built With
+## <a id="built-with"></a>🛠️ Built With
 
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
@@ -65,7 +63,7 @@ Note: Website may be slow at times due to API restrictions. 😊
 [![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 [![EJS](https://img.shields.io/badge/EJS-8C8C8C?style=for-the-badge&logo=ejs&logoColor=white)](https://ejs.co/)
 
-### 🌐 APIs Used
+## <a id="apis-used"></a>🌐 APIs Used
 
 - [MusicBrainz API](https://musicbrainz.org/doc/MusicBrainz_API) – for metadata like artists, albums, and songs
 - [Cover Art Archive](https://musicbrainz.org/doc/Cover_Art_Archive) – for fetching album artwork
@@ -75,13 +73,13 @@ Note: Website may be slow at times due to API restrictions. 😊
 
 <!-- GETTING STARTED -->
 
-## Getting Started
+## <a id="getting-started"></a>Getting Started
 
 Follow these steps so you can run MusicFinder locally.
 
 <!-- USAGE EXAMPLES -->
 
-## 📖 Usage
+## <a id="usage"></a>📖 Usage
 
 Here's what you can do with MusicFinder:
 
@@ -90,7 +88,7 @@ Here's what you can do with MusicFinder:
 - 📜 Read lyrics
 - 🖼️ View album artwork and artist info
 
-### 🖼️ Preview
+### <a id="preview"></a>🖼️ Preview
 
 ![Search Example](./public/images/readme-images/home-sample.png)
 _Search for any artist, album or song_
@@ -109,7 +107,7 @@ _Read lyrics and see song info_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Prerequisites
+## <a id="prerequisites"></a>Prerequisites
 
 Before running this project, make sure you have the following installed on your machine:
 
@@ -126,7 +124,7 @@ npm -v
 git --version
 ```
 
-### Installation
+## <a id="installation"></a>Installation
 
 1. Clone the repo
 
@@ -151,7 +149,7 @@ git --version
 
 <!-- LICENSE -->
 
-## License
+## <a id="license"></a>License
 
 This project is intended for educational purposes only and is not licensed for commercial use or redistribution.
 
